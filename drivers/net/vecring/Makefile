@@ -1,6 +1,7 @@
 #   BSD LICENSE
-#
-#   Copyright(c) 2010-2015 Intel Corporation. All rights reserved.
+#	Copyright(c) 2016 Linc@unitedstack 
+#   Copyright(c) 2010-2014 Intel Corporation. All rights reserved.
+#   Copyright(c) 2014 6WIND S.A.
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without
@@ -31,34 +32,32 @@
 
 include $(RTE_SDK)/mk/rte.vars.mk
 
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_AF_PACKET) += af_packet
-DIRS-$(CONFIG_RTE_LIBRTE_BNX2X_PMD) += bnx2x
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_BOND) += bonding
-DIRS-$(CONFIG_RTE_LIBRTE_CXGBE_PMD) += cxgbe
-DIRS-$(CONFIG_RTE_LIBRTE_E1000_PMD) += e1000
-DIRS-$(CONFIG_RTE_LIBRTE_ENA_PMD) += ena
-DIRS-$(CONFIG_RTE_LIBRTE_ENIC_PMD) += enic
-DIRS-$(CONFIG_RTE_LIBRTE_FM10K_PMD) += fm10k
-DIRS-$(CONFIG_RTE_LIBRTE_I40E_PMD) += i40e
-DIRS-$(CONFIG_RTE_LIBRTE_IXGBE_PMD) += ixgbe
-DIRS-$(CONFIG_RTE_LIBRTE_MLX4_PMD) += mlx4
-DIRS-$(CONFIG_RTE_LIBRTE_MLX5_PMD) += mlx5
-DIRS-$(CONFIG_RTE_LIBRTE_MPIPE_PMD) += mpipe
-DIRS-$(CONFIG_RTE_LIBRTE_NFP_PMD) += nfp
-DIRS-$(CONFIG_RTE_LIBRTE_BNXT_PMD) += bnxt
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_NULL) += null
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_PCAP) += pcap
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += vecring
-DIRS-$(CONFIG_RTE_LIBRTE_QEDE_PMD) += qede
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_RING) += ring
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_SZEDATA2) += szedata2
-DIRS-$(CONFIG_RTE_LIBRTE_THUNDERX_NICVF_PMD) += thunderx
-DIRS-$(CONFIG_RTE_LIBRTE_VIRTIO_PMD) += virtio
-DIRS-$(CONFIG_RTE_LIBRTE_VMXNET3_PMD) += vmxnet3
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_XENVIRT) += xenvirt
+#
+# library name
+#
+LIB = librte_pmd_vecring.a
 
-ifeq ($(CONFIG_RTE_LIBRTE_VHOST),y)
-DIRS-$(CONFIG_RTE_LIBRTE_PMD_VHOST) += vhost
-endif # $(CONFIG_RTE_LIBRTE_VHOST)
+CFLAGS += -O3 
+CFLAGS += $(WERROR_FLAGS)
 
-include $(RTE_SDK)/mk/rte.subdir.mk
+EXPORT_MAP := rte_pmd_vecring_version.map
+
+LIBABIVER := 1
+
+#
+# all source are stored in SRCS-y
+#
+SRCS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += rte_eth_vecring.c vecring_ops.c hugepage_util.c vecring.c
+
+#
+# Export include files
+#
+SYMLINK-y-include +=
+
+# this lib depends upon:
+DEPDIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += lib/librte_eal
+DEPDIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += lib/librte_mbuf
+DEPDIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += lib/librte_mempool
+DEPDIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += lib/librte_ether
+DEPDIRS-$(CONFIG_RTE_LIBRTE_PMD_VECRING) += lib/librte_kvargs
+include $(RTE_SDK)/mk/rte.lib.mk

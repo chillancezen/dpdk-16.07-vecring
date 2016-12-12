@@ -309,6 +309,11 @@ CONFIG_RTE_PMD_RING_MAX_TX_RINGS=16
 CONFIG_RTE_LIBRTE_PMD_PCAP=n
 
 #
+#compile software PMD powered by VECRING
+#
+CONFIG_RTE_LIBRTE_PMD_VECRING=y
+
+#
 # Compile link bonding PMD library
 #
 CONFIG_RTE_LIBRTE_PMD_BOND=y
